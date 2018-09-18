@@ -1,9 +1,21 @@
 const Vue = require('vue')
-const server = require('express')()
+const server = require('express')
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
 const renderer = require('vue-server-renderer').createRenderer();
 const template = require('fs').readFileSync('./index.template.html', 'utf-8');
 
-server.get('*', (req, res) => {
+const app = express();
+const isProd = process.env.NODE_ENV === 'production'
+
+const config = require('./build/webpack.server.config.js');
+const compiler = webpack(config);
+
+app.use(webpackDevMiddleware(compiler,{
+  publicPath: config.output.publicPath 
+}));
+
+app.get('*', (req, res) => {
 	const app = new Vue({
 		data: {
 			title: 'hello sl',
@@ -22,7 +34,7 @@ server.get('*', (req, res) => {
   })
 })
 
-server.listen(3000, function () {
+app.listen(3000, function () {
   // var host = server.address().address;
   // var port = server.address().port;
 
