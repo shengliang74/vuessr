@@ -3,12 +3,18 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export function createRouter () {
+// cosnt Home = () => import('./components/Home.vue')
+// cosnt Item = () => import('./components/Item.vue')
+
+import Home from './components/Home.vue';
+import Item from './components/Item.vue';
+
+export function createRouter(){
 	return new Router({
 		mode: 'history',
 		routes: [
-			{path: '/', component: () => import('./components/Home.vue')},
-			{path: '/item/:id', component: () => import('./components/Item.vue')},
+			{path: '/', component: Home},
+			{path: '/item/:id', component: Item},
 		]
 	})
 }

@@ -1,15 +1,26 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const baseConfig = reuqire('./webpack.base.config.js')
+const baseConfig = require('./webpack.base.config.js')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
 module.exports = merge(baseConfig, {
-	entry: '/path/to/entry-client.js',
+	entry: './src/entry-client.js',
 	plugins: [
-		new webpack.optimize.CommonsChunkPlugin({
-			name: "manifest",
-			minChunks: Infinity
-		}),
+		// new webpack.optimize.CommonsChunkPlugin({
+		// 	name: "manifest",
+		// 	minChunks: Infinity
+		// }),
 		new VueSSRClientPlugin()
-	]
+	],
+	optimization: {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    name: "manifest",
+                    chunks: "initial",
+                    minChunks: 2
+                }
+            }
+        }
+    }
 })
